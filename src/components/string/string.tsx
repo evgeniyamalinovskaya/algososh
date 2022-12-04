@@ -69,6 +69,8 @@ export const StringComponent: React.FC = () => {
                   isLimitText={true}
                   value={input}
                   onChange={handleChangeInput}
+                  data-testid='input'
+
               />
               <Button
                   text="Развернуть"
@@ -76,11 +78,13 @@ export const StringComponent: React.FC = () => {
                   disabled={!input}
                   isLoader={isLoading}
                   onClick={handleReverseString}
+                  data-testid='button'
+
               />
           </form>
           <ul className={stringStyle.circle}>
               {stringArr.map((item, index) => {
-                  return <Circle
+                  return <Circle data-testid={'testCircle'}
                       key={index} letter={item.value} state={item.color}
                   />
               })}
