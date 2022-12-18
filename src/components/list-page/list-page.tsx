@@ -252,6 +252,7 @@ export const ListPage: React.FC = () => {
       <div className={listStyle.container}>
       <div className={listStyle.form}>
         <Input
+            data-testid='input'
             placeholder="Введите значение"
             isLimitText={true}
             maxLength={4}
@@ -289,6 +290,7 @@ export const ListPage: React.FC = () => {
       </div>
       <div className={listStyle.form}>
         <Input
+            data-testid='input-index'
             type="number"
             placeholder="Введите индекс"
             value={inputIndex}

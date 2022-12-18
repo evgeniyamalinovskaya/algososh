@@ -70,7 +70,6 @@ export const StringComponent: React.FC = () => {
                   value={input}
                   onChange={handleChangeInput}
                   data-testid='input'
-
               />
               <Button
                   text="Развернуть"
@@ -79,7 +78,6 @@ export const StringComponent: React.FC = () => {
                   isLoader={isLoading}
                   onClick={handleReverseString}
                   data-testid='button'
-
               />
           </form>
           <ul className={stringStyle.circle}>

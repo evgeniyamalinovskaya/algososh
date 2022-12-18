@@ -187,7 +187,7 @@ export const SortingPage: React.FC = () => {
           </div>
         </div>
       </form>
-      <ul className={sortingStyle.column}>
+      <ul data-testid='column' className={sortingStyle.column} >
         {sortingArr.map((item, index) => {
           return (
               <Column
