@@ -11,6 +11,11 @@ export const StackPage: React.FC = () => {
   const [stackArr, setStackArr] = useState<string[]>([]); // начальное состояние
   const [input, setInput] = useState<string>('');
   const [color, setColor] = useState<ElementStates>(ElementStates.Changing)
+  const [isLoading, setIsLoading] = useState({
+      add: false,
+      delete: false,
+      clear: false,
+  });
 
     const stack = React.useMemo(() => {
         return new Stack<string>()
@@ -22,6 +27,7 @@ export const StackPage: React.FC = () => {
 
     //Добавление
     const handleAdd = async () => {
+        setIsLoading({ ...isLoading, add: true });
         stack.push(input)
         setInput("")
         setTimeout(() => {
@@ -31,11 +37,14 @@ export const StackPage: React.FC = () => {
                 setColor(ElementStates.Default)
                 setStackArr([...stack.getElements()])
             }, 500)
+            setIsLoading({ ...isLoading, add: false });
         }, 500)
+
     }
 
     //Удаление
     const handleDelete = async () => {
+        setIsLoading({ ...isLoading, delete: true });
         setTimeout(() => {
             setColor(ElementStates.Changing)
             setStackArr([...stack.getElements()])
@@ -44,13 +53,18 @@ export const StackPage: React.FC = () => {
                 setColor(ElementStates.Default)
                 setStackArr([...stack.getElements()])
             }, 500)
+            setIsLoading({ ...isLoading, delete: false });
         }, 500)
     }
 
     //Очистка
     const handleClear = async () => {
+        setIsLoading({ ...isLoading, clear: true });
+        setTimeout(() => {
         stack.clear()
-        setStackArr([])
+            setStackArr([])
+            setIsLoading({ ...isLoading, clear: false });
+        }, 500)
     }
 
   return (
@@ -67,17 +81,20 @@ export const StackPage: React.FC = () => {
               text='Добавить'
               disabled={!input.length}
               onClick={handleAdd}
+              isLoader={isLoading.add}
                />
           <Button
               text='Удалить'
               disabled={!stackArr.length}
               onClick={handleDelete}
+              isLoader={isLoading.delete}
                />
         </div>
         <Button
             text='Очистить'
             disabled={!stackArr.length}
             onClick={handleClear}
+            isLoader={isLoading.clear}
              />
       </div>
       <div className={stakeStyle.circle}>

@@ -1,7 +1,7 @@
-const testUrl = 'http://localhost:3000/';
+import {testUrl} from '../../src/utils/constants';
 
 describe("Сервис загружен", () => {
-    it("Сервис доступен по localhost:3000",  () => {
+    it("Сервис доступен по localhost:3000", () => {
         cy.visit(testUrl);
     });
 });

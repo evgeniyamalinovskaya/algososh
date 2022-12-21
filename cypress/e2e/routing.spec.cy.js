@@ -1,4 +1,4 @@
-const testUrl = 'http://localhost:3000/';
+import {testUrl} from '../../src/utils/constants';
 
 describe('Проверка маршрутизации приложений', function() {
     it('Посещение МБОУ АЛГОСОШ', function() {

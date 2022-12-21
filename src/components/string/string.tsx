@@ -53,7 +53,8 @@ export const StringComponent: React.FC = () => {
         setIsLoading(false);
     }
 
-    const handleReverseString = () => {
+    const handleReverseString = (e: React.FormEvent<HTMLFormElement> | React.FormEvent<HTMLButtonElement>) => {
+        e.preventDefault();
         const arr = input
             .split('').map((value) => ({value, color: ElementStates.Default}));
         reverseString(arr);
@@ -62,7 +63,7 @@ export const StringComponent: React.FC = () => {
     return (
       <SolutionLayout title="Строка">
           <div className={stringStyle.container}>
-          <form className={stringStyle.form}>
+          <form className={stringStyle.form} onSubmit={handleReverseString}>
               <Input
                   maxLength={11}
                   extraClass={stringStyle.input}
@@ -76,8 +77,8 @@ export const StringComponent: React.FC = () => {
                   extraClass={stringStyle.button}
                   disabled={!input}
                   isLoader={isLoading}
-                  onClick={handleReverseString}
                   data-testid='button'
+                  onClick={handleReverseString}
               />
           </form>
           <ul className={stringStyle.circle}>

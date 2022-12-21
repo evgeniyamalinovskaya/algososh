@@ -1,4 +1,4 @@
-const testUrl = 'http://localhost:3000';
+import {testUrl, dataTestCircle} from '../../src/utils/constants';
 
 describe('Страница Фибоначчи отображается правильно', () => {
     beforeEach(() => {
@@ -16,7 +16,7 @@ describe('Страница Фибоначчи отображается прав�
         // eslint-disable-next-line testing-library/await-async-utils
         cy.wait(500 * 19);
 
-        cy.get('[data-testid="circle div"]')
+        cy.get(dataTestCircle)
             .should('have.length', 19)
             .each((value, index) => {
                 if (index === 0) cy.wrap(value).contains(0);
