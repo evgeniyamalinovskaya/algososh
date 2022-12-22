@@ -214,37 +214,54 @@ export const ListPage: React.FC = () => {
             await delay(1000);
             setLoaderAddIndex(false);
             //Очищаем поле
+            setInput('')
             setInputIndex(1);
     }
 
 
     //Удалить по индексу
-    const deleteIndex = async (index: number) => {
+    const deleteIndex = async (inputIndex: number) => {
         setLoaderDeleteIndex(true);
-        list.deleteByIndex(index);
-        for (let i = 0; i <= index; i++) {
-            listArr[i].state = ElementStates.Changing;
+        list.deleteByIndex(inputIndex);
+        for (let i = 0; i <= inputIndex; i++) {
+            listArr[i] = {
+                ...listArr[i],
+                state: ElementStates.Changing,
+            }
             await delay(1000);
             setListArr([...listArr]);
         }
-        listArr[index] = {
-            ...listArr[index],
+        listArr[inputIndex] = {
+            ...listArr[inputIndex],
             element: '',
             delete: true,
+            state: ElementStates.Changing,
             smallCircle: {
-                element: input,
+                element: listArr[inputIndex].element,
             },
         }
-        setListArr([...listArr]);
         await delay(1000);
+        setListArr([...listArr]);
         //Прорисовка
-        listArr.splice(index, 1)
-        setListArr([...listArr]);
+        listArr.splice(inputIndex, 1)
+        listArr[inputIndex - 1] = {
+            ...listArr[inputIndex - 1],
+            element: listArr[inputIndex - 1].element,
+            state: ElementStates.Default,
+            smallCircle: {
+                element: null,
+            },
+        }
         await delay(1000);
+        setListArr([...listArr]);
         listArr.forEach((elem) => {
             elem.state = ElementStates.Default;
         })
+        await delay(1000);
+        setListArr([...listArr]);
         setLoaderDeleteIndex(false);
+        setInput('');
+        setInputIndex(1);
     }
 
   return (
@@ -252,6 +269,7 @@ export const ListPage: React.FC = () => {
       <div className={listStyle.container}>
       <div className={listStyle.form}>
         <Input
+            data-testid='input'
             placeholder="Введите значение"
             isLimitText={true}
             maxLength={4}
@@ -262,14 +280,14 @@ export const ListPage: React.FC = () => {
               text="Добавить в head"
               type="button"
               onClick={addHead}
-              disabled={!input.length}
+              disabled={!input}
               isLoader={loaderAddHead}
           />
           <Button
               text="Добавить в tail"
               type="button"
               onClick={addTail}
-              disabled={!input.length}
+              disabled={!input}
               isLoader={loaderAddTail}
           />
           <Button
@@ -289,6 +307,9 @@ export const ListPage: React.FC = () => {
       </div>
       <div className={listStyle.form}>
         <Input
+            min={0}
+            max={listArr.length - 1}
+            data-testid='input-index'
             type="number"
             placeholder="Введите индекс"
             value={inputIndex}
@@ -299,14 +320,14 @@ export const ListPage: React.FC = () => {
               type="button"
               onClick={addIndex}
               isLoader={loaderAddIndex}
-              disabled={!input || !inputIndex}
+              disabled={!input || !inputIndex || inputIndex > listArr.length - 1 }
                   />
           <Button
               text="Удалить по индексу"
               type="button"
-              onClick={(index) =>  deleteIndex(Number(index))}
+              onClick={(index) =>  deleteIndex(Number(inputIndex))}
               isLoader={loaderDeleteIndex}
-              disabled={!inputIndex}
+              disabled={!inputIndex || listArr.length === 0 || inputIndex > listArr.length - 1}
           />
 
       </div>

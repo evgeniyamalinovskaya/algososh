@@ -21,6 +21,11 @@ export const QueuePage: React.FC = () => {
   const queueLength = Array.from({ length: 7 }, () => ({ value: '', color: ElementStates.Default }));
   const [queueArr, setQueueArr] = useState<TQueueItem[]>(queueLength);
   const [color, setColor] = useState(false);
+  const [isLoading, setIsLoading] = useState({
+    add: false,
+    delete: false,
+    clear: false,
+  });
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
@@ -29,6 +34,7 @@ export const QueuePage: React.FC = () => {
   //Добавление
   const handleAdd = async () => {
     if (input) {
+      setIsLoading({ ...isLoading, add: true });
       setInput('');
       queue.enqueue({ value: input, color: ElementStates.Default });
       setQueue(queue);
@@ -39,11 +45,13 @@ export const QueuePage: React.FC = () => {
       setQueueArr([...queueArr]);
       queueArr[queue.getTail() - 1] = { value: input, color: ElementStates.Default };
       setQueueArr([...queueArr]);
+      setIsLoading({ ...isLoading, add: false });
     }
   };
 
   //Удаление
   const handleDelete = async () => {
+    setIsLoading({ ...isLoading, delete: true });
     setColor(true);
     queue.dequeue();
     setQueue(queue);
@@ -54,21 +62,24 @@ export const QueuePage: React.FC = () => {
     setQueueArr([...queueArr]);
     if (queue.getHead() === 7 && queue.getTail() === 7 && queue.isEmpty()) {
       queueArr[queue.getHead() - 1] = { value: '', color: ElementStates.Default, head: 'head' };
-      setQueueArr([...queueArr]);
     }
+    setIsLoading({ ...isLoading, delete: false });
     setColor(false);
   };
 
   //Очистить
-  const handleClear = () => {
+  const handleClear = async () => {
+    setIsLoading({ ...isLoading, clear: true });
     queue.clear()
     setQueue(queue);
+    await delay(500);
+    setIsLoading({ ...isLoading, clear: false });
     setQueueArr(Array.from({ length: 7 }, () => ({ value: '', color: ElementStates.Default })));
   };
 
   return (
       <SolutionLayout title="Очередь">
-        <form className={queueStyle.form}>
+        <form className={queueStyle.form} onSubmit={(e) => e.preventDefault()}>
           <div className={queueStyle.container}>
             <Input
                 maxLength={4}
@@ -80,17 +91,20 @@ export const QueuePage: React.FC = () => {
                 text="Добавить"
                 disabled={input === '' || color}
                 onClick={handleAdd}
+                isLoader={isLoading.add}
             />
             <Button
                 text="Удалить"
                 disabled={queue.isEmpty() || color}
                 onClick={handleDelete}
+                isLoader={isLoading.delete}
             />
           </div>
           <Button
               text="Очистить"
               disabled={!queue.getHead() && !queue.getTail() || color}
               onClick={handleClear}
+              isLoader={isLoading.clear}
           />
         </form>
         <div className={queueStyle.circles}>

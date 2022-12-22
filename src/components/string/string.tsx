@@ -53,7 +53,8 @@ export const StringComponent: React.FC = () => {
         setIsLoading(false);
     }
 
-    const handleReverseString = () => {
+    const handleReverseString = (e: React.FormEvent<HTMLFormElement> | React.FormEvent<HTMLButtonElement>) => {
+        e.preventDefault();
         const arr = input
             .split('').map((value) => ({value, color: ElementStates.Default}));
         reverseString(arr);
@@ -62,25 +63,27 @@ export const StringComponent: React.FC = () => {
     return (
       <SolutionLayout title="Строка">
           <div className={stringStyle.container}>
-          <form className={stringStyle.form}>
+          <form className={stringStyle.form} onSubmit={handleReverseString}>
               <Input
                   maxLength={11}
                   extraClass={stringStyle.input}
                   isLimitText={true}
                   value={input}
                   onChange={handleChangeInput}
+                  data-testid='input'
               />
               <Button
                   text="Развернуть"
                   extraClass={stringStyle.button}
                   disabled={!input}
                   isLoader={isLoading}
+                  data-testid='button'
                   onClick={handleReverseString}
               />
           </form>
           <ul className={stringStyle.circle}>
               {stringArr.map((item, index) => {
-                  return <Circle
+                  return <Circle data-testid={'testCircle'}
                       key={index} letter={item.value} state={item.color}
                   />
               })}
