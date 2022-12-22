@@ -19,8 +19,9 @@ describe('Корректно разворачивает строку',() => {
         const button = screen.getByTestId('button');
         const testString = "string";
         //Предоставляет набор методов для взаимодействия с элементами (Элемент с которым взаимодействует)
+
         userEvent.type(input, testString)
-        expect(input).toBe(testString)
+        expect(input).toHaveValue(testString)
         //Может нажать на кнопку (Элемент с которым взаимодействует)
         fireEvent.click(button)
         //Использование waitFor для ожидания элементов
@@ -41,11 +42,11 @@ describe('Корректно разворачивает строку',() => {
         const button = screen.getByTestId('button');
         const testString = 'world';
         userEvent.type(input, testString)
-        expect(input).toBe(testString)
+        expect(input).toHaveValue(testString)
         fireEvent.click(button)
         await waitFor(() => {
             const id = screen.getAllByTestId('testCircle').map((el) => el.textContent)
-            expect(id.join('')).tobe(Array(testString).reverse().join(''))
+            expect(id.join('')).toBe(Array(testString).reverse().join(''))
         }, {timeout: 1000})
 
     })
@@ -60,7 +61,7 @@ describe('Корректно разворачивает строку',() => {
         const button = screen.getByTestId('button');
         const testString = "S";
         userEvent.type(input, testString)
-        expect(input).toBe(testString)
+        expect(input).toHaveValue(testString)
         fireEvent.click(button)
         await waitFor(() => {
             const id = screen.getAllByTestId('testCircle').map((el) => el.textContent)
@@ -76,7 +77,7 @@ describe('Корректно разворачивает строку',() => {
         )
         const input = screen.getByTestId('input');
         const button = screen.getByTestId('button');
-        userEvent.type(input, '')
+        expect(input).toHaveValue('')
         //Использование неправильных утверждений (полученный элемент не отключен)
         expect(button).toBeDisabled()
     })
